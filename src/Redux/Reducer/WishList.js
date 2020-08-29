@@ -1,50 +1,37 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import Toast from 'native-base';
+import {Toast} from 'native-base';
 export const ADD_ITEM ='ADD_ITEM';
 export const REMOVE_ITEM ='REMOVE_ITEM';
 export const EMPTY_WISHLIST ='EMPTY_WISHLIST';
 export const ADD_QUANTITY='ADD_QUANTITY'
 var b = 0;
 var MATCH = 'false';
-export function addItem(product, navigation){
-    var obj = product;
-    Object.assign(obj, {pro_qty: 1});
-
-    if (product.in_stock == 0) {
-      Toast.show({
-        text: 'Product out of stock',
-      });
-      return;
-    } else {
-      Toast.show({
-        text: 'Added to WishList successfully',
-        position: 'bottom',
-        type: 'success',
-        buttonText: 'View WishList',
-        buttonStyle:{borderColor:"#fff",borderWidth:1},
-        onClose:(reason)=>{
+export function addWishItem(product, navigation){
+      // Toast.show({
+      //   text: 'Added to WishList successfully',
+      //   position: 'bottom',
+      //   type: 'success',
+      //   buttonText: 'View WishList',
+      //   buttonStyle:{borderColor:"#fff",borderWidth:1},
+      //   style: {
+      //     backgroundColor: "blue",
+      //     marginBottom:10
+      //    },
+      //   onClose:(reason)=>{
                   
-          if(reason=='user')
-          {
-            navigation.navigate('Wish List');
-          }
-        },
-        duration: 3000
-      });
+      //     if(reason=='user')
+      //     {
+      //       navigation.navigate('Wish List');
+      //     }
+      //   },
+      //   duration: 3000
+      // });
       return {
         type:ADD_ITEM,
-        data:obj
-    }
+        data:product
     }
 } 
-export function addItemQuanToWishList(product, value){
-  return {
-    type:ADD_QUANTITY,
-    val: value,
-    data:obj
-}
-}
-export function removeItem(data){
+export function removeWishItem(data){
     return {
         type:REMOVE_ITEM,
         data:data
@@ -68,35 +55,8 @@ AsyncStorage.getItem('Wish', (error, result) => {
     }
   }
 });
-function WishList(state=intialState,action){
+function WishList(state=initialState,action){
   switch(action.type){
-      case ADD_QUANTITY :
-      //console.warn();
-      if (action.val == 'add') {
-        return {
-          ...state,
-          Wish: state.Wish.map(WishItem => {
-            if (WishItem.id === action.data.id) {
-              WishItem.pro_qty = WishItem.pro_qty + 1;
-            }
-            return WishItem;
-          }),
-          //action.payload,
-          //,
-        };
-      } else {
-        return {
-          ...state,
-          Wish: state.Wish.map(WishItem => {
-            if (WishItem.id === action.data.id) {
-              WishItem.pro_qty = WishItem.pro_qty - 1;
-            }
-            return WishItem;
-          }),
-          //action.payload,
-          //,
-        };
-      }
       case EMPTY_WISHLIST :
       return {
         ...state,
@@ -117,8 +77,11 @@ function WishList(state=intialState,action){
             : state.total + parseInt(action.data.price).toFixed(2),
       };
       case REMOVE_ITEM:
-       let temp = state.filter(item=>item!=action.data.text&&action.data.createdAt)
-       return temp;            
+        return {
+          ...state,
+          Wish: state.Wish.filter((item, i) => item.id !== action.data.id),
+          total: state.total - parseInt(action.data.price).toFixed(2),
+        };         
        default:
        return state; 
   }

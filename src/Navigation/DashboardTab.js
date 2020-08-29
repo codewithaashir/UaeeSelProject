@@ -10,7 +10,10 @@ import { Icon } from 'react-native-elements';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { Images } from "../Assets";
 import { Colors } from '../Utils';
-import {WishList,Categories,Cart,Home} from '../Components';
+import {WishList,Categories,Cart,Home,Account} from '../Components';
+import {useSelector} from 'react-redux';
+import { CategoryProduct } from '../Components/Categories/CategoryProduct';
+import { Page } from '../Components/Account/Page';
 //*** Start of Wish List Stack***
 const WishListStack = createStackNavigator();
 const WishListStackScreen = (props)=>{
@@ -40,6 +43,7 @@ const CategoryStackScreen = (props)=>{
     headerMode="none" initialRouteName="Category"
      >
       <CategoryStack.Screen name='Category' component={Categories}/>
+      <CategoryStack.Screen name='CategoryProduct' component={CategoryProduct}/>
     </CategoryStack.Navigator>  
   )
 }
@@ -61,6 +65,24 @@ const CartStackScreen = (props)=>{
   )
 }
 //***End of Category List Stack***
+
+//*** Start of Account  Stack***
+const AccountStack = createStackNavigator();
+const AccountStackScreen = (props)=>{
+  return(
+    <AccountStack.Navigator 
+    screenOptions={params => ({
+      gestureDirection: 'horizontal',
+      cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+    })}
+    headerMode="none" initialRouteName="Account"
+     >
+      <AccountStack.Screen name='Account' component={Account}/>
+      <AccountStack.Screen name='AppPages' component={Page}/>
+    </AccountStack.Navigator>  
+  )
+}
+//***End of Account List Stack***
 
 //*** Start of Home List Stack***
 const HomeStack = createStackNavigator();
@@ -136,6 +158,8 @@ const Tabs = [
   },
 ]
 export default HomeTabs = props => {
+  const {Wish} = useSelector(state=>state.WishList);
+  const {Cart} = useSelector(state=>state.CartList);
   // Get a name of current screen
   const routeName = props && props.route && props.route.state
     ? props.route.state.routes[props.route.state.index].name
@@ -155,9 +179,6 @@ export default HomeTabs = props => {
     }
   };
 
-  const WishCount = '2';
-  const CartCount = '2';
-
   return (
     <React.Fragment >
       <RenderHeader />
@@ -165,7 +186,7 @@ export default HomeTabs = props => {
         shifting={true}
         labeled={false}
         activeColor={Colors.appBlue}
-        inactiveColor={Colors.appGreen}
+        inactiveColor={Colors.appRed}
         barStyle={{
           backgroundColor: Colors.white,
           borderTopLeftRadius:15,
@@ -173,32 +194,90 @@ export default HomeTabs = props => {
         }}
         backBehavior="initialRoute"
       >
-        {Tabs.map((item, index) => (
+        <Tab.Screen
+            //key={index.toString()}
+            name={'Home'}
+            component={HomeStackScreen}
+            options={({
+              tabBarIcon: ({ focused, color }) => <Image source={Images.home} style={[iconstyles, { tintColor: color }]} />,
+              tabBarColor,
+            })}
+            initialParams={{ refresh: false }}
+          />
+           <Tab.Screen
+            //key={index.toString()}
+            name={'Categories'}
+            component={CategoryStackScreen}
+            options={({
+              tabBarIcon: ({ focused, color }) => <Image source={Images.categories} style={[iconstyles, { tintColor: color }]} />,
+              tabBarColor,
+            })}
+            initialParams={{ refresh: false }}
+          />
+          <Tab.Screen
+            //key={index.toString()}
+            name={'Wish List'}
+            component={WishListStackScreen}
+            options={({
+              tabBarIcon: ({ focused, color }) => <React.Fragment>
+              {Wish.length>=1&&
+               <View style={[styles.Bad,{right:-10}]}>
+                 <Text style={{ fontSize: 8,color:Colors.appBlue }}>{Wish.length}</Text>
+               </View>}
+               <Image source={Images.wishList} style={[iconstyles, { tintColor: color }]} />
+             </React.Fragment>,
+              tabBarColor,
+            })}
+            initialParams={{ refresh: false }}
+          />
+          <Tab.Screen
+            //key={index.toString()}
+            name={'Deals'}
+            component={HomeScreen}
+            options={({
+              tabBarIcon: ({ focused, color }) => <Fontisto name='shopping-package' color={color} size={20}/>,
+              tabBarColor,
+            })}
+            initialParams={{ refresh: false }}
+          />
+          <Tab.Screen
+            //key={index.toString()}
+            name={'Cart'}
+            component={CartStackScreen}
+            options={({
+              tabBarIcon: ({ focused, color }) =>  <>
+              {Cart.length>=1&&
+               <View style={styles.Bad}>
+                 <Text style={{ fontSize: 8,color:Colors.appBlue }}>{Cart.length}</Text>
+               </View>}
+               <Icon type='feather' name='shopping-bag' color={color} size={20}/>
+             </>,
+              tabBarColor,
+            })}
+            initialParams={{ refresh: false }}
+          />
+          <Tab.Screen
+            //key={index.toString()}
+            name={'Account'}
+            component={AccountStackScreen}
+            options={({
+              tabBarIcon: ({ focused, color }) => <Image source={Images.account} style={[iconstyles, { tintColor: color }]} />,
+              tabBarColor,
+            })}
+            initialParams={{ refresh: false }}
+          />
+        {/* {Tabs.map((item, index) => (
           <Tab.Screen
             key={index.toString()}
             name={item.name}
             component={item.component}
             options={({
-              tabBarIcon: ({ focused, color }) => item.icon(focused, color, item.name == 'Cart' ? CartCount : WishCount),
+              tabBarIcon: ({ focused, color }) => item.icon(focused, color, item.name == 'Cart' ?CartListItem.Cart.length : WishListItem.Wish.length),
               tabBarColor,
             })}
             initialParams={{ refresh: false }}
-          // listeners={({ navigation, route }) => ({
-          //   tabPress: e => {
-          //     if (route.params.title === '.') {
-          //       e.preventDefault();
-          //       navigation.setParams({
-          //         refresh: true,
-          //       });
-          //     }
-          //   },
-          // })}
-          // options={{
-          //   tabBarIcon:({ focused, color})=>item.icon(focused, color),
-          //   tabBarColor,
-          // }}
           />
-        ))}
+        ))} */}
       </Tab.Navigator>
 
     </React.Fragment>

@@ -10,56 +10,61 @@ import { AuthContext } from '../../Utils';
 import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 import OnboardSliderItem, { Slider_Height, OnBoardSubSlide } from './OnboardSliderItem';
 import Languages from '../../Utils/Languages';
-
-const data = [
-    {
-        id: 0,
-        description: Languages.Description1,
-        title: Languages.Title1,
-        subtitle: Languages.Subtitle1,
-        right: true,
-        image: Images.logo,
-    },
-    {
-        id: 1,
-        description: Languages.Description2,
-        title: Languages.Title2,
-        subtitle: Languages.Subtitle2,
-        right: false,
-        image: Images.logo,
-    },
-    {
-        id: 2,
-        description: Languages.Description3,
-        title: Languages.Title3,
-        subtitle: Languages.Subtitle3,
-        right: true,
-        image: Images.logo,
-    },
-    {
-        id: 3,
-        description: Languages.Description4,
-        title: Languages.Title4,
-        subtitle: Languages.Subtitle4,
-        right: false,
-        image: Images.logo,
-    },
-
-];
+import { Service } from '../../Config/Services';
+import { ImgURl } from '../../Config/Apis';
 const maxWidth = Dimensions.get('window').width;
 const maxHeight = Dimensions.get('window').height;
+// [
+//     {
+//         id: 0,
+//         description: Languages.Description1,
+//         title: Languages.Title1,
+//         subtitle: Languages.Subtitle1,
+//         right: true,
+//         image: Images.logo,
+//     },
+//     {
+//         id: 1,
+//         description: Languages.Description2,
+//         title: Languages.Title2,
+//         subtitle: Languages.Subtitle2,
+//         right: false,
+//         image: Images.logo,
+//     },
+//     {
+//         id: 2,
+//         description: Languages.Description3,
+//         title: Languages.Title3,
+//         subtitle: Languages.Subtitle3,
+//         right: true,
+//         image: Images.logo,
+//     },
+//     {
+//         id: 3,
+//         description: Languages.Description4,
+//         title: Languages.Title4,
+//         subtitle: Languages.Subtitle4,
+//         right: false,
+//         image: Images.logo,
+//     },
+
+// ]
 function Onboard(props) {
     LogBox.ignoreLogs(['Warning: ...']);
     const [step, setStep] = useState(0);
+    const [data,setData]=useState([]);
     // const carouselRef = useRef(null)
 
     const { onboard } = useContext(AuthContext);
 
     const maxWidth = Dimensions.get('window').width;
     const halfWidth = maxWidth / 2
-
+    useEffect(()=>{
+        Service.getOnBoarding(setData);
+    },[])
 
     const handleNext = props => {
+        if(data.length!=0){
         if (step == data.length - 1) {
             onboard();
             return;
@@ -67,46 +72,38 @@ function Onboard(props) {
         else {
             setStep(step + 1);
         }
+    }
     };
 
 
     const backgroundColor = () => {
         switch (step) {
             case 0:
-                return Colors.cyan
+                return Colors.appBlue+'10'
             case 1:
-                return Colors.lightGreen
+                return Colors.appRed+'10'
             case 2:
-                return Colors.lightRed
+                return Colors.appGreen+'10'
             case 3:
-                return Colors.lightYellow
+                return Colors.appBlue+'10'
             default:
-                return Colors.lightYellow
+                return Colors.appBlue+'10'
         }
         color;
     }
 
     return (
-        <View style={styles.root}>
+        <View style={styles.root} onTouchEnd={()=>handleNext(props)}>
             <StatusBar backgroundColor={backgroundColor()} />
             <View style={[styles.slider, { backgroundColor: backgroundColor() }]}>
-                {/* <FlatList 
-                    data={data}
-                    horizontal={true}
-                    renderItem={({title, right,image }, index)=>{
+                {data.length!=0&&
+                    data.map((item,index) => {
                         if (index == step) {
-                            return (<OnboardSliderItem key={index.toString()} title={title} right={right} image={image}/>)
-                        }
-                    }}
-                /> */}
-                {/* {
-                    data.map(({ title, right,image }, index) => {
-                        if (index == step) {
-                            return (<OnboardSliderItem key={index.toString()} title={title} right={right} image={image}/>)
+                            return (<OnboardSliderItem key={index.toString()} title={item.label} right={index%2==0?true:false} image={ImgURl+item.image}/>)
                         }
                     }
                     )
-                } */}
+                }
 
             </View>
 
@@ -134,10 +131,10 @@ function Onboard(props) {
                             }}
                             inactiveDotOpacity={1}
                         />
-                        {
-                            data.map(({ subtitle, description }, index) => {
+                        {data.length!=0&&
+                            data.map((item, index) => {
                                 if (index == step) {
-                                    return (<OnBoardSubSlide key={index.toString()} subtitle={subtitle} description={description} />)
+                                    return (<OnBoardSubSlide key={index.toString()} subtitle={item.title} description={item.description} />)
                                 }
                             }
                             )
@@ -146,10 +143,10 @@ function Onboard(props) {
                     </View>
                     <TouchableOpacity
                         activeOpacity={0.7}
-                        style={[styles.getStartedButton, step == data.length - 1 ? { backgroundColor: Colors.mediumGrey } : null]}
+                        style={[styles.getStartedButton, step == data.length!=0&&data.length - 1 ? { backgroundColor: Colors.mediumGrey } : null]}
                         onPress={() => handleNext(props)}
                     >
-                        <Text style={[styles.buttonTitle, step == data.length - 1 ? { color: Colors.white } : null]}>{step == data.length - 1 ? Languages.LetsStart : Languages.Next}</Text>
+                        <Text style={[styles.buttonTitle, step == data.length!=0&&data.length - 1 ? { color: Colors.white } : null]}>{step == data.length - 1 ? Languages.LetsStart : Languages.Next}</Text>
                     </TouchableOpacity>
                 </View>
 

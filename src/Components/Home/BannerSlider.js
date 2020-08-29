@@ -10,8 +10,10 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { colors } from 'react-native-elements';
+import { Colors } from '../../Utils';
+import {colors} from  'react-native-elements';
+import { Service } from '../../Config/Services';
+import { ImgURl } from '../../Config/Apis';
 
 const ENTRIES1 = [
   {
@@ -45,6 +47,7 @@ const {width: screenWidth} = Dimensions.get('window');
 const MyCarousel = props => {
   const [entries, setEntries] = useState([]);
   const [activeSlide,setActiveSlide]=useState(1);
+  const [loading,setLoading]=useState(false);
   const carouselRef = useRef(null);
 
   const goForward = () => {
@@ -52,14 +55,15 @@ const MyCarousel = props => {
   };
 
   useEffect(() => {
-    setEntries(ENTRIES1);
+    //setEntries(ENTRIES1);
+    Service.getBanners(setEntries)
   }, []);
   
   const renderItem = ({item, index}, parallaxProps) => {
     return (
       <View style={styles.item}>
         <ParallaxImage
-          source={{uri: item.illustration}}
+          source={{uri: ImgURl+item.banner_image}}
           containerStyle={styles.imageContainer}
           style={styles.image}
           parallaxFactor={0.4}
@@ -122,8 +126,15 @@ const styles = StyleSheet.create({
   },
   title:{
    transform:[{ translateY:-50 }],
-   color:'#ffff',
-   marginLeft:10,
+   color:Colors.white,
+   backgroundColor:Colors.appBlue+'31',
+   justifyContent:'center',
+   alignItems:'center',
+   borderRadius:5,
+   height:50,
+   width:'auto',
+   //marginLeft:10,
+   padding:10,
    fontFamily:'Lato-Black',
    fontSize:16 
   },

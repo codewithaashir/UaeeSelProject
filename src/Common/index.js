@@ -11,7 +11,9 @@ import UaeAnimatedView from  './AnimatedView'
 import UaeEmpty from  './EmptyList' 
 import UaeCategoriesItem  from   './CategoriesItem' 
 import UaeProductItem from  './ProductItem';
-
+import UaeProductCatalog from './ProductCatalog';
+import  UaeCommonItem  from './CommonItem';
+import UaeItem from  './Item';
 export const CustomDesign=UaeCustomDesign
 export const Device=UaeDevice
 export const Header=UaeHeader
@@ -25,3 +27,6 @@ export const AnimatedView=UaeAnimatedView
 export const Empty=UaeEmpty
 export const CategoriesItem =UaeCategoriesItem
 export const ProductItem =UaeProductItem
+export const ProductCatalog = UaeProductCatalog
+export const CommonItem = UaeCommonItem
+export const Item = UaeItem

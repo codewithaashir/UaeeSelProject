@@ -56,7 +56,7 @@ export  default  function Categories(props){
    });
   return(
      <AnimatedView style={{flex:1}}>   
-     <Animated.ScrollView scrollEventThrottle={1} {...{onScroll}} showsVerticalScrollIndicator={false} style={{backgroundColor:Colors.appRed+'31',padding:10}}>
+     <Animated.ScrollView scrollEventThrottle={1} {...{onScroll}} showsVerticalScrollIndicator={false} style={{padding:10}}>
        {categories.map((item,index)=>(
          <Animated.View
          key={index}
@@ -66,7 +66,7 @@ export  default  function Categories(props){
            transform: [{ perspective }, { skewY }],
          }}
        >
-       <CategoriesItem item={item} index={index}/>
+       <CategoriesItem item={item} index={index} {...props}/>
        </Animated.View>
        ))}
      </Animated.ScrollView>  

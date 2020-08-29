@@ -3,9 +3,12 @@ export const ImgURl = "https://uaesell.ae/admin_panel/";
 export const Apis = {
     Signup: URL + "/register",
     Login: URL + "/login",
+    SociaLogin:URL+'/socialLogin',
+    getBanners:URL+'/getBanner',
     Categories: URL + "/getAll",
     ALLproduct: URL + "/getProductBySubCate/",
     contact_us: URL + "/query/store",
+    getPage:URL+'/getPage',
     UserInfo: URL + "/user/userInfo",
     Payment: URL + "/payment/paymentStore",
     featuredProducts: URL + "/featuredProducts",
@@ -14,7 +17,9 @@ export const Apis = {
     Profile: URL + "/user/EditProfile",
     History: URL + "/payment/previousOrders",
     ChangePass: URL + "/user/changePassword",
-    SearChProduct: URL + "/allProduct"
+    SearchProductByName: URL + "/searchProduct",
+    SearchProductByPrice:URL+'/searchPrice',
+    getOnboarding:URL+'/getOnboarding'
 };
 export const HeaderSend = {
     SetHeaders: (token) => {

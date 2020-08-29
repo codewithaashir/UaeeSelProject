@@ -1,17 +1,50 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import {Toast} from 'native-base';
 export const ADD_ITEM ='ADD_ITEM';
 export const REMOVE_ITEM ='REMOVE_ITEM';
 export const EMPTY_CartLIST ='EMPTY_CartLIST';
-export const ADD_QUANTITY='ADD_QUANTITY'
+export const ADD_QUANTITY='ADD_QUANTITY';
 var b = 0;
 var MATCH = 'false';
-export function addItem(data){
-  return {
-      type:ADD_ITEM,
-      data:data
+export function addCartItem(product, navigation){
+  var obj = product;
+  Object.assign(obj, {pro_qty: 1});
+  
+  if (product.in_stock == 0) {
+        Toast.show({
+          text: 'Product out of stock',
+        });
+        return;
+      } else {
+        // Toast.show({
+        //   text: 'Added to Cart successfully',
+        //   position: 'bottom',
+        //   type: 'success',
+        //   buttonText: 'View Cart',
+        //   buttonStyle:{borderColor:"#fff",borderWidth:1},
+        //   onClose:(reason)=>{
+                    
+        //     if(reason=='user')
+        //     {
+        //       navigation.navigate('Wish List');
+        //     }
+        //   },
+        //   duration: 3000
+        // });
+        return {
+          type:ADD_ITEM,
+          data:obj
+      }
+      }
+  } 
+  export function addItemQuanToCart(product, value){
+    return {
+      type:ADD_QUANTITY,
+      val: value,
+      data:product
   }
-} 
-export function removeItem(data){
+  }
+export function removeCartItem(data){
     return {
         type:REMOVE_ITEM,
         data:data
@@ -35,7 +68,7 @@ AsyncStorage.getItem('Cart', (error, result) => {
     }
   }
 });
-function CartList(state=intialState,action){
+function CartList(state=initialState,action){
   switch(action.type){
       case ADD_QUANTITY :
       //console.warn();

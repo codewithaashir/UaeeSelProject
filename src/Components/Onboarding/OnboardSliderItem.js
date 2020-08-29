@@ -31,7 +31,7 @@ function OnboardSliderItem({title,right,image}) {
            <FastImage
            style={{...StyleSheet.absoluteFill,width:'auto',height:'auto',resizeMode:'contain'}}
            source={{
-               uri: 'https://www.freeiconspng.com/thumbs/men-suit-png/men-suit-png-19.png',
+               uri: image,
                priority: FastImage.priority.high,
            }}
            resizeMode={FastImage.resizeMode.contain}
@@ -42,7 +42,7 @@ function OnboardSliderItem({title,right,image}) {
         //    />
           }  
           <View style={[styles.titleContainer,{transform}]}>  
-          <Text style={styles.title}>
+          <Text style={[styles.title,right?{borderBottomLeftRadius:40,borderTopRightRadius:50}:{borderBottomRightRadius:50,borderTopLeftRadius:50}]}>
            {title}   
          </Text>  
          </View>
@@ -58,6 +58,8 @@ const styles = StyleSheet.create({
     title:{
         fontFamily:'Lato-Bold',
         color:Colors.white,
+        backgroundColor:Colors.appBlue+'20',
+        padding:10,
         fontSize:80,
     },
     subtitleContainer:{

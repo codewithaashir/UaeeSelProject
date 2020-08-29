@@ -5,20 +5,22 @@ import Lang from './Languages';
 import {useConst} from './useConstHook';
 import { PixelRatio } from 'react-native';
 import currencyFormatter from "currency-formatter";
+import {Constant} from './Constant';
 import {Images} from '../Assets';
 export const AuthContext = Contex;
 export const Colors = Color;
 export const  useConsts=useConst;
 export const Languages =Lang;
 export const NavService=NavigationService;
+export const AppConstant=Constant; 
 
  // format currency
  export const getCurrecyFormatted = (price) => {
     let formatedPrice = "";
     if (price && price !== "") {
       formatedPrice = currencyFormatter.format(price, {
-        code:'PKR',
-        symbol:'Rs '
+        code:'AED',
+        symbol:'Aed '
 
       });
     }

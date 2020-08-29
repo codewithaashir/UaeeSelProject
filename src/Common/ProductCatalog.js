@@ -13,12 +13,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addWishItem }from '../Redux/Reducer/WishList';
 import {addCartItem,addItemQuanToCart }from '../Redux/Reducer/Cart';
 import AsyncStorage from '@react-native-community/async-storage';
-import { ImgURl } from '../Config/Apis';
 const {height,width} = Dimensions.get('window');
 
 const ItemHeight=height*0.32;
 let opac='41'
-export default function ProductItem(props){
+export default function ProductCatalog(props){
   const initialTranform=-16 
   const dispatch =useDispatch();
   const [tranformText,setTranformText] = useState(new Animated.Value(-16));
@@ -27,7 +26,7 @@ export default function ProductItem(props){
   const {index,item,scene} = props;
   useEffect(()=>{
     Animated.timing(tranformText, {
-      toValue: 16,
+      toValue: 24,
       duration: 600,
       easing: Easing.bezier(0, 1.19, 0.74, 1.2)
     }).start();
@@ -55,36 +54,35 @@ export default function ProductItem(props){
     
     return(
         <View 
-        style={[styles.container,{
-          backgroundColor:index%2==0?
-            Colors.appBlue+(parseInt(opac)+index).toString()
-            :
-            Colors.appRed+(parseInt(opac)+index).toString()
+        style={[styles.container,index%2==0?{marginStart:10,marginEnd:5}:{marginEnd:10},{
+            // backgroundColor:index%2==0?
+            // Colors.appBlue
+            // :
+            // Colors.appRed
         },
              index % 2 != 0||scene!='Home' && { marginLeft:10 }]}>
 
           <FastImage
            style={styles.productImg}
            source={{
-               uri:getProductImage(ImgURl+item.featured_image,width),
+               uri:getProductImage(item.featured_image,width),
                priority: FastImage.priority.high,
            }}
            resizeMode={FastImage.resizeMode.contain}
           />   
         
-         <View style={styles.bottomView}>
-         <TouchableOpacity activeOpacity={0.7}   style={styles.iconBtn} onPress={()=>onWishPress(item)}>     
+         <View style={[styles.bottomView]}>
+         <TouchableOpacity activeOpacity={0.7}   style={[styles.iconBtn,{marginBottom:6}]} onPress={()=>onWishPress(item)}>     
          <Image source={Images.wishList} style={[iconstyles, { tintColor: Colors.appGreen }]} />   
          </TouchableOpacity>
-         <Animated.View style={{flexDirection:'column',justifyContent:'space-between',transform:[{translateY:tranformText}]}}>
-         <Typography variant="category" numberOfLines={2} style={css.nameTwo}>{item.name?item.name:''}</Typography> 
-         <ProductPrice product={item} hideDisCount/>   
-         </Animated.View>
-         <TouchableOpacity activeOpacity={0.7}   style={styles.iconBtn} onPress={()=>onCartPress(item)}> 
-         {/* <Icon type='feather' name='plus' color={Colors.appGreen} size={10} style={{marginLeft:10}} /> */}
+             <TouchableOpacity activeOpacity={0.7}   style={styles.iconBtn} onPress={()=>onCartPress(item)}> 
          <Icon type='feather' name='shopping-bag' color={Colors.appGreen} size={20}/>
          </TouchableOpacity>
          </View>
+         <Animated.View style={{flex:1,flexDirection:'column',transform:[{translateY:tranformText}]}}>
+         <Typography variant="category" numberOfLines={2} style={css.nameTwo}>{item.name?item.name:''}</Typography> 
+         <ProductPrice product={item} hideDisCount/>   
+         </Animated.View>
         </View>    
     )
 }
@@ -105,10 +103,11 @@ const styles=StyleSheet.create({
     },
     bottomView:{
       flex:1,
+      flexDirection:'column',
       alignItems:'flex-end',
-      justifyContent:'space-between',
-      padding:30,  
-      flexDirection:'row'  
+      justifyContent:'flex-end',
+      paddingBottom:36,
+      paddingRight:10  
     },
     iconBtn:{
       width:30,

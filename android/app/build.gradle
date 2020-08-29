@@ -1,5 +1,5 @@
 apply plugin: "com.android.application"
-
+apply plugin: "io.fabric"
 import com.android.build.OutputFile
 
 /**
@@ -134,6 +134,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -150,6 +151,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+             if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
     }
     buildTypes {
         debug {
@@ -162,6 +171,24 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
+    }
+      packagingOptions {
+        pickFirst 'lib/x86/libswscale.so'
+        pickFirst 'lib/x86/libavcodec.so'
+        pickFirst 'lib/x86/libavformat.so'
+        pickFirst 'lib/x86/libavutil.so'
+        pickFirst 'lib/x86_64/libavutil.so'
+        pickFirst 'lib/x86_64/libavcodec.so'
+        pickFirst 'lib/x86_64/libswscale.so'
+        pickFirst 'lib/x86_64/libavformat.so'
+        pickFirst 'lib/arm64-v8a/libavcodec.so'
+        pickFirst 'lib/arm64-v8a/libavformat.so'
+        pickFirst 'lib/arm64-v8a/libavutil.so'
+        pickFirst 'lib/arm64-v8a/libswscale.so'
+        pickFirst 'lib/armeabi-v7a/libavutil.so'
+        pickFirst 'lib/armeabi-v7a/libavformat.so'
+        pickFirst 'lib/armeabi-v7a/libavcodec.so'
+        pickFirst 'lib/armeabi-v7a/libswscale.so'
     }
 
     // applicationVariants are e.g. debug, release
@@ -181,10 +208,13 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"  // From node_modules
-
+     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "com.android.support:appcompat-v7:23.0.1"
+    implementation "com.facebook.react:react-native:+"
+    implementation(project(":react-native-community_google-signin"))
+    implementation project(":react-native-fbsdk")
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation "com.google.android.gms:play-services-base:16.1.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
@@ -217,3 +247,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply plugin: 'com.google.gms.google-services'

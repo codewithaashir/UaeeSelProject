@@ -8,11 +8,12 @@ function TextButton(props) {
     return (
         <TouchableOpacity
         activeOpacity={0.7}
-        style={[props.styles,styles.getStartedButton,props.light?{}:{backgroundColor:Colors.mediumGrey}]}
+        style={[props.styles,styles.getStartedButton,props.small?{backgroundColor:Colors.appRed,width:120}:props.light?{}:{backgroundColor:Colors.appRed}]}
         hitSlop={{ left: 20, right: 20, top: 20, bottom: 20 }}
         onPress={props.onPress}
         >
-        <Text style={[props.styles,styles.buttonTitle,props.light?{}:{color:Colors.white,backgroundColor:Colors.mediumGrey}]}>{props.children}</Text>
+        
+        <Text style={[props.styles,styles.buttonTitle,props.light?{}:{color:Colors.white}]}>{props.children}</Text>
        </TouchableOpacity>
     );
 }

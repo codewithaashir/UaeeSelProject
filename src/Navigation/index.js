@@ -52,6 +52,7 @@ const AuthStackScreen = () => (
         <AuthStack.Screen name="LetStarted" component={LetStarted} />
         <AuthStack.Screen name="Login" component={Login} />
         <AuthStack.Screen name="ForgetPassword" component={Forget} />
+        <AuthStack.Screen name="Guest" component={AppStackScreen}/>
         <AuthStack.Screen name="Signup" component={Signup} />
     </AuthStack.Navigator>
 );
@@ -124,8 +125,12 @@ export default () => {
                     setIsLoading(false);
                 }, 2000);
             },
-            signIn: (obj, rememberMe, adduserData, loading, error,navigation) => {
+            signIn: (obj,type, rememberMe, adduserData, loading, error,navigation) => {
+                if(type!='socialLogin')
                 Service.Login(obj, rememberMe, adduserData, loading, setUserToken, error,navigation);
+                else
+                Service.SocialSignIn(obj, rememberMe, adduserData, loading, setUserToken, error,navigation);
+
             },
             signUp: async (data, navigation, loading, message) => {
                 Service.Signup(data,navigation,loading, message);
@@ -146,11 +151,6 @@ export default () => {
                 setTimeout(() => {
                     setIsLoading(false);
                 }, 2000);
-            },
-            googleSignIn: userInfo => {
-                console.log('authContext -> userInfo', userInfo.token.accessToken);
-                setUserToken(userInfo.token.accessToken);
-                AsyncStorage.setItem('@userToken', JSON.stringify(userInfo.token.accessToken)).then(res => console.log('success', res));
             },
 
         };

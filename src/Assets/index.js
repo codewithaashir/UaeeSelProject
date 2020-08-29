@@ -8,4 +8,5 @@ export const Images = {
     account:require("./Icons/icon-user.png"),
     headerLogo:require("./Icons/header-logo.png"),
     PlaceHolderURL: "http://mstore.io/wp-content/uploads/2017/07/placeholder.png",
+    lauchImg:require('./Icons/launch.png')
   };

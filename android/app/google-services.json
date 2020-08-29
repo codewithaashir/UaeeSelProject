@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "568875059269",
+    "firebase_url": "https://uae-sell.firebaseio.com",
+    "project_id": "uae-sell",
+    "storage_bucket": "uae-sell.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:568875059269:android:474b25ef360ffcf0eabb2c",
+        "android_client_info": {
+          "package_name": "com.uaesell"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "568875059269-a4dfeshuriu0iihjaniqdu5inp3hf3pm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uaesell",
+            "certificate_hash": "a0a01bc95f5a78cf0f6de9dff1f5efc1782d9659"
+          }
+        },
+        {
+          "client_id": "568875059269-7s34p491b6efn0epfq0rd9mha2k76i21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uaesell",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "568875059269-d26i6vtn17qaff4ekrmff5dkiqiv14e8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdGd5H-bWZiH8PHjYFurQAY-kQXqE5qo4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "568875059269-d26i6vtn17qaff4ekrmff5dkiqiv14e8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

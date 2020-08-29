@@ -1,57 +1,53 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
-import { View, StyleSheet, StatusBar, YellowBox, Dimensions, LogBox } from 'react-native';
+import { View, StyleSheet, StatusBar, YellowBox, Dimensions, LogBox, KeyboardAvoidingView, Platform } from 'react-native';
 import {Colors} from '../Utils';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Languages from '../Utils/Languages';
 import FastImage from 'react-native-fast-image';
 import {AnimatedView} from './AnimatedView';
+import { Images } from '../Assets';
 const maxWidth = Dimensions.get('window').width;
 const maxHeight = Dimensions.get('window').height;
+import LinearGradient from 'react-native-linear-gradient';
 const aspectRatio = 240 / 576;
 const backgroundHeight = maxWidth * aspectRatio;
 function CustomDesgin(props) {
     LogBox.ignoreLogs(['Warning: ...']);
 
     return (
-        <View style={styles.root}>
-            
-            <StatusBar barStyle={'light-content'} backgroundColor={'#008a49'} />
-            <View style={[styles.slider]}>
-                <FastImage
-                    style={{ width: maxWidth, height: backgroundHeight, resizeMode: 'contain', borderBottomLeftRadius: 55, overflow: "hidden" }}
-                    source={{
-                        uri: 'https://t4.ftcdn.net/jpg/01/77/35/23/240_F_177352308_aX3Jhbt4O6YdOl1mXuf3gjmIW0LWqTTH.jpg',
-                        priority: FastImage.priority.high,
-                    }}
-                    resizeMode={FastImage.resizeMode.contain}
-                />
-            </View>
+        <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+        style={styles.root}
+        >
+            <LinearGradient  colors={[Colors.appGreen, Colors.appBlue, Colors.appRed]} style={[styles.slider,{ width: maxWidth, height: backgroundHeight, resizeMode: 'contain', borderBottomLeftRadius: 55, overflow: "hidden",backgroundColor: Colors.appRed }]}>
+            <StatusBar translucent={true} backgroundColor={'transparent'} />
+               <FastImage
+                 source={Images.logo}
+                 resizeMode={FastImage.resizeMode.contain}
+               />
+            </LinearGradient>
 
             <View style={styles.footer}>
-                <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor: Colors.darkBlue, overflow: "hidden" }}>
-                    <FastImage
-                        style={{ width: maxWidth, height: backgroundHeight, overflow: "hidden", top: -backgroundHeight * 0.71 }}
-                        source={{
-                            uri: 'https://t4.ftcdn.net/jpg/01/77/35/23/240_F_177352308_aX3Jhbt4O6YdOl1mXuf3gjmIW0LWqTTH.jpg',
-                            priority: FastImage.priority.high,
-                        }}
-                        resizeMode={FastImage.resizeMode.contain}
+            <LinearGradient useAngle={true} angle={360} angleCenter={{ x: 0.1, y: 0.1}} colors={[Colors.appBlue, Colors.appRed, '#192f6a']} style={{ ...StyleSheet.absoluteFillObject, backgroundColor: Colors.appBlue, overflow: "hidden" }}>
+                    <View
+                        style={{ width: maxWidth, height: backgroundHeight, overflow: "hidden", top: -backgroundHeight * 0.71,backgroundColor:Colors.appRed }}
                     />
-                </View>
+            </LinearGradient>
                 <View style={styles.footerContainer}>
                     {props.Body}
                 </View>
-                <View style={{ bottom: 0, height: maxHeight * 0.17, backgroundColor: Colors.darkBlue }}>
+                <LinearGradient  colors={[Colors.appBlue, Colors.appRed, Colors.appGreen]} style={{ bottom: 0, height: maxHeight * 0.17, backgroundColor: Colors.appBlue }}>
                  {props.Footer&&
                    props.Footer
                  }    
-                </View>
+                </LinearGradient>
 
             </View>
 
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -65,7 +61,7 @@ const styles = StyleSheet.create({
     slider: {
         //backgroundColor:Colors.lightGreen,
         height: backgroundHeight,
-        borderBottomRightRadius: 75
+        borderBottomRightRadius: 0
     },
     footer: {
         flex: 1

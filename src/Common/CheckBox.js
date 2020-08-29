@@ -13,7 +13,7 @@ function CheckboxButton(props) {
             <Checkbox
                 onPress={props.onPress}
                 status={props.status ? "checked" : "unchecked"}
-                color={Colors.darkBlue}
+                color={Colors.appRed}
             />
             <Typography variant="bold">
                 {props.title}

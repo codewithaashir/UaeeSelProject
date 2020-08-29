@@ -8,6 +8,11 @@ export default StyleSheet.create({
     color: Colors.darkBlue,
     fontSize: 14,
   },
+  empty:{
+    flex:1,
+    alignItems:'center',
+    justifyContent:'center'
+  },
   text_grid: {
     color: Colors.darkBlue,
     fontSize: 12,

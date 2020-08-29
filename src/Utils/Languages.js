@@ -41,7 +41,8 @@ const Languages = {
       ViewMyOrders: "View My Oders",
       CANCEL: "CANCEL",
       Confirm: "Confirm",
-  
+
+      ReachedOuttoUs:"REACHED OUT TO US",
       // Scene's Titles
       Home: "Home",
       Intro: "Intro",
@@ -312,13 +313,13 @@ const Languages = {
       newArrivals: "New Arrivals",
       shopByCategory: "Shop By Category",
   
-  
+      Version:"Version",
       // Modal
       Select: "Select",
       Cancel: "Cancel",
   
       LanguageName: "English",
-  
+      AllRights:"All rights reserved",
       // review
       vendorTitle: "Vendor",
       comment: "Leave a review",
@@ -693,7 +694,7 @@ const Languages = {
       errInputComment: "يرجى إدخال المحتوى الخاص بك لتقديمه",
       errRatingComment: "يرجى تصنيف لتقديم",
       send: "إرسال",
-  
+      ReachedOuttoUs:"وصلت إلينا",
       termCondition: "الأحكام والشروط",
       Subtotal: "حاصل الجمع",
       Discount: "خصم",
@@ -717,7 +718,9 @@ const Languages = {
       Location: "موقعك",
       Free: "حر",
       Days: "أيام",
-      NoShippingMsg: "ليس لديك أي طرق شحن لعنوانك"
+      NoShippingMsg: "ليس لديك أي طرق شحن لعنوانك",
+      Version:"الإصدار",
+      AllRights:"كل الحقوق محفوظة"
     },
   };
 

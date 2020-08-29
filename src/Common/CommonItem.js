@@ -18,7 +18,7 @@ const {height,width} = Dimensions.get('window');
 
 const ItemHeight=height*0.32;
 let opac='41'
-export default function ProductItem(props){
+export default function CommonItem(props){
   const initialTranform=-16 
   const dispatch =useDispatch();
   const [tranformText,setTranformText] = useState(new Animated.Value(-16));
@@ -55,8 +55,7 @@ export default function ProductItem(props){
     
     return(
         <View 
-        style={[styles.container,{
-          backgroundColor:index%2==0?
+        style={[styles.container,{backgroundColor:index%2==0?
             Colors.appBlue+(parseInt(opac)+index).toString()
             :
             Colors.appRed+(parseInt(opac)+index).toString()

@@ -1,36 +1,47 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-import React, { useContext } from 'react';
-import { View, Text, Image, StyleSheet, StatusBar, YellowBox, Dimensions, LogBox } from 'react-native';
+import React, { useContext, useEffect,useState } from 'react';
+import { View, Text, Image, StyleSheet, StatusBar, YellowBox, Dimensions, LogBox,Animated } from 'react-native';
 import { Images } from '../../Assets';
 import {OnBoardSubSlide } from './OnboardSliderItem';
 import {TextButton} from '../../Common';
 import { NavService,Languages,AuthContext,Colors } from '../../Utils';
-
+import LinearGradient from 'react-native-linear-gradient';
 const maxWidth = Dimensions.get('window').width;
 const maxHeight = Dimensions.get('window').height;
 function LetStarted(props) {
     LogBox.ignoreLogs(['Warning: ...']);
-    
+    const spring = () => {
+        SpringValue.setValue(0.2)
+        Animated.spring(
+          SpringValue,
+          {
+            toValue: 1,
+            friction: 1
+          }
+        ).start()
+      }
     // const carouselRef = useRef(null)
 
     const { onboard } = useContext(AuthContext);
-
+    const [SpringValue, setSpringValue] = useState(new Animated.Value(0.2))
     const maxWidth = Dimensions.get('window').width;
     const halfWidth = maxWidth / 2
-
+    useEffect(()=>{
+        spring();
+    },[])
     return (
         <View style={styles.root}>
-            <StatusBar backgroundColor={Colors.lightYellow} />
-            <View style={[styles.slider, { backgroundColor: Colors.lightYellow}]}>   
-            <Image
-             source={{uri:'https://www.freeiconspng.com/thumbs/men-suit-png/men-suit-png-19.png'}}
-             style={{...StyleSheet.absoluteFill,width:'auto',height:'auto',resizeMode:'contain'}}
+            <LinearGradient  colors={[Colors.appGreen, Colors.appBlue, Colors.appRed]} style={[styles.slider, { backgroundColor: Colors.appBlue}]}>   
+            <StatusBar translucent={true} backgroundColor={'transparent'} />
+            <Animated.Image
+             source={Images.PlaceHolderURL}
+             style={[styles.iconImage,{ transform: [{ scale: SpringValue }] }]}
            />
-            </View>
+            </LinearGradient >
 
             <View style={styles.footer}>
-                <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor:Colors.lightYellow }} />
+                <LinearGradient useAngle={true} angle={360} angleCenter={{ x: 0.9, y: 0.9}} colors={[Colors.appGreen, Colors.appBlue, Colors.appRed]} style={{ ...StyleSheet.absoluteFillObject, backgroundColor:Colors.appBlue }} />
                 <View style={{ flex: 1, backgroundColor: Colors.white, borderTopLeftRadius: 75 }}>
                     <View style={styles.bottomContainer}>
                     <OnBoardSubSlide  subtitle={Languages.LetsStart} description={Languages.StartedDescription} />
@@ -48,7 +59,7 @@ function LetStarted(props) {
                     </TextButton>
                     <TextButton
                         light
-                        onPress={() => NavService.goTo('ForgetPassword',props.navigation)}
+                        onPress={() => NavService.goTo('Guest',props.navigation)}
                     >
                      {Languages.CheckInGuest}
                     </TextButton>
@@ -69,6 +80,8 @@ const styles = StyleSheet.create({
     },
     slider: {
         //backgroundColor:Colors.lightGreen,
+        justifyContent:'center',
+        alignItems:'center',
         height: 0.51*maxHeight,
         borderBottomRightRadius: 75
     },
@@ -83,6 +96,11 @@ const styles = StyleSheet.create({
         width: "100%",
         alignItems: 'center',
     },
+    iconImage:{
+        width:200,
+        height:200,
+        resizeMode:'contain'
+    }
 });
 
 export default LetStarted;

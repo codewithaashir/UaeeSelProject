@@ -47,7 +47,8 @@ function ModalComponent(props) {
                             <TextButton
                                 filled={true}
                                 style={styles.button}
-                                onPress={() => {if(props.loading==false){ props.setVisible(false);props.setResponse?props.setResponse(''):null}}}
+                                onPress={() => props.setVisible(false)}
+                                //onPress={() => {if(props.loading==false){ props.setVisible(false);props.setResponse?props.setResponse(''):null}}}
                             >
                                 OK
                             </TextButton>

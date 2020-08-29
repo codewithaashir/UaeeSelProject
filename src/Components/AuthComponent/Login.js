@@ -9,9 +9,124 @@ import { useDispatch } from 'react-redux';
 import { OnBoardSubSlide } from '../Onboarding/OnboardSliderItem';
 import {Languages,NavService,Colors,AuthContext} from '../../Utils';
 import { Icon } from 'react-native-elements';
-const Social=[{name:'facebook-f',onPress:()=>{console.warn('hello')}},{name:'google',onPress:()=>{console.warn('hello')}}]
-function Login(props) {
+import { GoogleSignin, statusCodes } from "@react-native-community/google-signin";
+import auth, { firebase } from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
+import {
+    LoginManager,
+    AccessToken,
+    GraphRequest,
+    GraphRequestManager
+  } from "react-native-fbsdk";
+  import {} from "@react-native-firebase/app";
+import { Toast } from 'native-base';
+import { Service } from '../../Config/Services';
+
+  function Login(props) {
     LogBox.ignoreLogs(['Warning: ...']);
+    const { signIn } = useContext(AuthContext);
+    const dispatch = useDispatch();
+    const adduserData = data => dispatch(adduserdata(data));
+    const [rememberMe, setRememberMe] = useState(false);
+    const [formIsValid, setFormIsValid] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [responseError, setResponseError] = useState('');
+    const [allFilled] = useState(false);
+    const  _onFBLogin = (result, token) => {
+      console.warn(result);
+    };
+   const InfoCallback = async (error: ?Object, result: ?Object) => {
+      if (!error) {
+        // console.warn(error);
+        // } else {
+        // Toast.show({
+        //   text: "Welcome " + result.name,
+        //   type: "success"
+        // });
+        var token = await messaging.getToken();
+        if (token) {
+          _onFBLogin(result, token);
+        }
+        else {
+          console.warn('error')
+        }
+      }
+    };
+   const  _signInWithFacebook = () => {
+      LoginManager.logInWithPermissions(["public_profile", "email"]).then(
+        result => {
+          if (result.isCancelled) {
+            // Toast.show({
+            //   text: "Canceled",
+            //   type: "warning"
+            // });
+          } else {
+            const info = new GraphRequest(
+              "/me",
+              {
+                parameters: {
+                  fields: {
+                    string: "id,email,name,picture.type(large)"
+                  }
+                }
+              },
+              InfoCallback()
+            );
+            new GraphRequestManager().addRequest(info).start();
+          }
+        }
+      );
+    };
+   const _signInWithGoogle = async () => {
+      try {
+        await GoogleSignin.hasPlayServices();
+        const userInfo = await GoogleSignin.signIn();
+  
+        var param = new FormData();
+        var token = await firebase.messaging().getToken();
+        if (token) {
+          param.append("f_name", userInfo.user.givenName);
+          param.append("l_name", userInfo.user.familyName);
+          param.append("email", userInfo.user.email);
+          param.append("profile_pic", userInfo.user.photo);
+          param.append("account_type", "Google");
+          param.append("device_id", token);
+          await signIn(param,'socialLogin', rememberMe, adduserData, setLoading, setResponseError, setModalVisible,props.navigation);    
+        }
+        else {
+          Toast.show({
+            text: "Error, Please try again later",
+            type: "warning"
+          });
+        }
+      } catch (error) {
+        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+          // sign in was cancelled
+          // Toast.show({
+          //   text: "Canceled",
+          //   type: "warning"
+          // });
+        } else if (error.code === statusCodes.IN_PROGRESS) {
+          // operation in progress already
+          Toast.show({
+            text: "In Progress",
+            type: "success"
+          });
+        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+          Toast.show({
+            text: "Google Play Services out-dated",
+            type: "warning"
+          });
+        } else {
+          Toast.show({
+            text: error.toString(),
+            type: "warning"
+          });
+        }
+      }
+    };
+    const Social=[{name:'facebook-f',onPress:()=>_signInWithFacebook()},{name:'google',onPress:()=>_signInWithGoogle()}]
     const [loginForm, updateLoginForm] = useState({
         email: {
             elementType: 'input',
@@ -43,19 +158,20 @@ function Login(props) {
         },
     });
 
-    const [formIsValid, setFormIsValid] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [responseError, setResponseError] = useState('');
+  
 
-    const [rememberMe, setRememberMe] = useState(false);
-    const [allFilled] = useState(false);
-    const { signIn } = useContext(AuthContext);
 
     // const filled = () => {
     //     if (email && password) toggleAllFilled(true)
     //     else toggleAllFilled(false)
     // }
+    useEffect(()=>{
+        GoogleSignin.configure({
+            webClientId:
+              "568875059269-d26i6vtn17qaff4ekrmff5dkiqiv14e8.apps.googleusercontent.com",
+            offlineAccess: false
+          });
+    },[])
 
     const handleLogin = async () => {
         if (formIsValid) {
@@ -106,8 +222,7 @@ function Login(props) {
         updateLoginForm(updatedForm);
         setFormIsValid(formIsValid);
     };
-    const dispatch = useDispatch();
-    const adduserData = data => dispatch(adduserdata(data));
+  
     // if (loading) return <AppLoader />
 
 
@@ -158,6 +273,7 @@ function Login(props) {
      >
          {Languages.Login}   
     </TextButton>
+  
     <Modal
         visible={modalVisible}
         setVisible={setModalVisible}
@@ -175,7 +291,7 @@ function Login(props) {
          underlayColor="transparent"
          name={item.name}
          type="font-awesome"
-         color={item.name=='google'?Colors.lightRed:Colors.lightGray}
+         color={item.name=='google'?Colors.appRed:Colors.appBlue}
          iconStyle={{ marginRight: 10 }}
          hitSlop={{ left: 20, right: 20, top: 20, bottom: 20 }}
          //onPress={() => setHide(!hide)}
