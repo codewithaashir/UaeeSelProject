@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import {Toast} from 'native-base';
-export const ADD_ITEM ='ADD_ITEM';
-export const REMOVE_ITEM ='REMOVE_ITEM';
+export const ADD_WISH_ITEM ='ADD_WISH_ITEM';
+export const REMOVE_WISH_ITEM ='REMOVE_WISH_ITEM';
 export const EMPTY_WISHLIST ='EMPTY_WISHLIST';
 export const ADD_QUANTITY='ADD_QUANTITY'
 var b = 0;
@@ -27,13 +27,13 @@ export function addWishItem(product, navigation){
       //   duration: 3000
       // });
       return {
-        type:ADD_ITEM,
+        type:ADD_WISH_ITEM,
         data:product
     }
 } 
 export function removeWishItem(data){
     return {
-        type:REMOVE_ITEM,
+        type:REMOVE_WISH_ITEM,
         data:data
     }
   } 
@@ -63,7 +63,7 @@ function WishList(state=initialState,action){
         Wish: [],
         total: 0,
       };
-      case ADD_ITEM:
+      case ADD_WISH_ITEM:
       MATCH = 'false';
       return {
         ...state,
@@ -74,13 +74,13 @@ function WishList(state=initialState,action){
         total:
           MATCH == 'true'
             ? state.total
-            : state.total + parseInt(action.data.price).toFixed(2),
+            : state.total + parseFloat(action.data.price),
       };
-      case REMOVE_ITEM:
+      case REMOVE_WISH_ITEM:
         return {
           ...state,
           Wish: state.Wish.filter((item, i) => item.id !== action.data.id),
-          total: state.total - parseInt(action.data.price).toFixed(2),
+          total: state.total - parseInt(action.data.price),
         };         
        default:
        return state; 

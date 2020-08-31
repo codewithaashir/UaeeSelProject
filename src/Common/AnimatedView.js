@@ -38,6 +38,7 @@ export default (props) => {
                 left: props.back ? null : scale,
                 backgroundColor: Colors.white,
             }}
+            
         >
             {props.children}
         </Animated.View>

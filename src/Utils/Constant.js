@@ -1,10 +1,11 @@
 import Languages from "./Languages";
 import { Icon } from "react-native-elements";
-import {Linking} from 'react-native';
+import {Linking,Image} from 'react-native';
 import { Colors } from ".";
 import React from 'react';
+import { Images } from "../Assets";
 export const Constant = {
-profileLoginItems : (User,navigation,signout) => {
+profileLoginItems : (User,navigation,setvisibleContactModel,setvisibleLanguageModel,log) => {
     return ([
     {
         title:'WhatsApp',
@@ -12,9 +13,14 @@ profileLoginItems : (User,navigation,signout) => {
         onPress:()=>Linking.openURL(`whatsapp://send?phone=${'0343247691'}&text=${'from UaeSell App'}`)
     },
     {
+        title:Languages.Language,
+        icon:<Image source={Images.language} style={{width:25,height:25,tintColor:Colors.appRed,resizeMode:'contain'}} />,
+        onPress:()=>setvisibleLanguageModel(true)    
+    },
+    {
         title:Languages.contactus,
         icon:<Icon type="material-community" name="email-outline" color={Colors.appRed}/>,
-        onPress:()=>console.warn('heelo')
+        onPress:()=>setvisibleContactModel(true)  
     },
     {
         title:Languages.About,
@@ -24,11 +30,11 @@ profileLoginItems : (User,navigation,signout) => {
     {
         title:Languages.Login,
         icon:<Icon type="material-community" name="login" color={Colors.appRed}/>,
-        onPress:()=>navigation.navigate('Login')
+        onPress:()=>log(navigation)
     },
 ])
 },
-profileLoggedItems : (User,navigation,signout) =>{
+profileLoggedItems : (User,navigation,setvisibleContactModel,setvisibleLanguageModel,signout) =>{
     return ([
         {
             title:'WhatsApp',
@@ -46,9 +52,14 @@ profileLoggedItems : (User,navigation,signout) =>{
             onPress:()=>console.warn('heelo')
         },
         {
+            title:Languages.Language,
+            icon:<Image source={Images.language} style={{width:25,height:25,tintColor:Colors.appRed,resizeMode:'contain'}} />,
+            onPress:()=>setvisibleLanguageModel(true)        
+        },
+        {
             title:Languages.contactus,
             icon:<Icon type="material-community" name="email-outline" color={Colors.appRed}/>,
-            onPress:()=>console.warn('heelo')
+            onPress:()=>setvisibleContactModel(true)
         },
         {
             title:Languages.About,

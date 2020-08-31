@@ -20,7 +20,7 @@ export const AppConstant=Constant;
     if (price && price !== "") {
       formatedPrice = currencyFormatter.format(price, {
         code:'AED',
-        symbol:'Aed '
+        symbol:'AED '
 
       });
     }

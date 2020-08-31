@@ -144,6 +144,15 @@ export default () => {
                 AsyncStorage.removeItem('@user');
                 // GoogleSignin.revokeAccess();
             },
+            log:(navigation)=>{
+                setIsLoading(false);
+                clearSignUpData();
+                clearUserDetails();
+                setUserToken(null);
+                AsyncStorage.setItem('@userToken', '');
+                AsyncStorage.removeItem('@user');
+                navigation.navigate('Auth',{screen:'Login'})
+            },
             onboard: () => {
                 setIsLoading(true);
                 setOnboarding('true');

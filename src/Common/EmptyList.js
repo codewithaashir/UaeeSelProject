@@ -8,6 +8,7 @@ import { Icon } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import TextButton from "./TextButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import GradientBtn from "./GradientButton";
 const maxHeight = Dimensions.get('window').height;
 const buttonContainer = {
   alignItems: "center",
@@ -38,23 +39,10 @@ class EmptyList extends PureComponent {
           <Text style={[styles.message, { color: Colors.appGreen }]}>
             {scene == 'wish' ? Languages.NoWishListItem : Languages.AddProductToCart}
           </Text>
-          
-          <View
-            style={[
-              buttonContainer,
-            ]}>
-            <TouchableOpacity
-              activeOpacity={0.7}
-
-              hitSlop={{ left: 20, right: 20, top: 20, bottom: 20 }}
-              onPress={onPress}
-            >
-              <LinearGradient style={[styles.getStartedButton, { backgroundColor: Colors.appRed, width: 120 }]} colors={[Colors.appBlue+'20', Colors.appRed+'18', Colors.appGreen+'11']} >
-                <Text style={[styles.buttonTitle]}>{Languages.ShopNow}</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-
-          </View>
+          <GradientBtn
+            title={Languages.ShopNow}
+            onPress={onPress}
+          />
         </View>
       </View>
     );

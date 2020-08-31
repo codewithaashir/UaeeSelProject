@@ -33,33 +33,36 @@ export default function ProductItem(props){
     }).start();
   },[]);
        addtocart = cart => {
-         AsyncStorage.setItem('CART', JSON.stringify(cart));
+         AsyncStorage.setItem('Cart', JSON.stringify(cart));
        };
        const onCartPress = async (item) =>{
            //console.warn(CartListItem.Cart)
-          var exist = CartListItem.Cart.find(value => {
+         if(CartListItem&&CartListItem.Cart&&CartListItem.Cart.length!=0){ 
+           var exist = CartListItem.Cart.find(value => {
             return value.id == item.id;
           });
           if (exist) {
             await dispatch(addItemQuanToCart(item,'add'));
             //this.props.addItemQuanToCart(this.props.product, 'add');
-          } else{
+          }
+        }
+          else{
             await dispatch(addCartItem(item,props.navigation));
             addtocart(CartListItem.Cart);
           }
         }
        const onWishPress =async (data) => {
          await dispatch(addWishItem(data,props.navigation))
-         AsyncStorage.setItem('CART', JSON.stringify(WishListItem.Wish));
+         AsyncStorage.setItem('Wish', JSON.stringify(WishListItem.Wish));
        } 
     
     return(
         <View 
         style={[styles.container,{
           backgroundColor:index%2==0?
-            Colors.appBlue+(parseInt(opac)+index).toString()
+            Colors.cyan+(parseInt(opac)+index).toString()
             :
-            Colors.appRed+(parseInt(opac)+index).toString()
+            Colors.cyan+(parseInt(opac)+index).toString()
         },
              index % 2 != 0||scene!='Home' && { marginLeft:10 }]}>
 

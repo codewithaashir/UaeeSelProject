@@ -9,6 +9,7 @@ import { ProgressBar } from 'react-native-paper';
 import TextButton from './TextButton';
 import FastImage from 'react-native-fast-image';
 import { Images } from '../Assets';
+import {Languages} from '../Utils';
 
 function ModalComponent(props) {
     return (
@@ -50,7 +51,7 @@ function ModalComponent(props) {
                                 onPress={() => props.setVisible(false)}
                                 //onPress={() => {if(props.loading==false){ props.setVisible(false);props.setResponse?props.setResponse(''):null}}}
                             >
-                                OK
+                                {Languages.OK}
                             </TextButton>
                         </>
                 }

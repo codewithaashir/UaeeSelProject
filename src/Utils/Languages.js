@@ -21,6 +21,8 @@ const Languages = {
       CheckInGuest:"Checkin as guest",
       Next:"Next",
       RememberMe:"Remember Me",
+      Message:"Message",
+      Subject:"Subject",
       ForgotPassword:"Forgot Password?",
       ForgotPasswordDescription:"Enter the email address associate with your account",
       ResetPassword:"Reset password",
@@ -79,7 +81,7 @@ const Languages = {
       ErrorMessageRequest: "Can't get data from server",
       NoConnection: "No internet connection",
       ProductRelated: "Related Products",
-  
+      ViewMore:'View More',
       // Cart
       NoCartItem: "There is no product in cart",
       Total: "Total",
@@ -110,7 +112,7 @@ const Languages = {
       Error: "Error",
       InvalidEmail: "Invalid email address",
       Finish: "Finish",
-  
+      
       // Wishlist
       NoWishListItem: "There is no item in wishlist",
       MoveAllToCart: "Add all to cart",
@@ -317,7 +319,8 @@ const Languages = {
       // Modal
       Select: "Select",
       Cancel: "Cancel",
-  
+      English:"English",
+      Arabic:"Arabic",
       LanguageName: "English",
       AllRights:"All rights reserved",
       // review
@@ -376,6 +379,8 @@ const Languages = {
       CheckInGuest:"تحقق كضيف",
       Next:"التالي",
       RememberMe:"تذكرنى",
+      Message:"رسالة",
+      Subject:"موضوع",
       ForgotPassword:"هل نسيت كلمة المرور",
       ForgotPasswordDescription:"أدخل عنوان البريد الإلكتروني المرتبط بحسابك",
       ResetPassword:"إعادة تعيين كلمة المرور",
@@ -415,7 +420,7 @@ const Languages = {
   
       // Category
       ThereIsNoMore: "لا يوجد منتجات لإظهارها",
-  
+      ViewMore:'عرض المزيد',
       // Product
       AddtoCart: "أضف إلى السلة",
       AddtoWishlist: "أضف إلى قائمة الرغبات",
@@ -682,7 +687,8 @@ const Languages = {
       Guest: "زائر",
   
       LanguageName: "Arabic",
-  
+      English:"الإنجليزية",
+      Arabic:"عربى",
       // review
       vendorTitle: "بائع",
       comment: "ترك التعليق",

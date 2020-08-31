@@ -10,7 +10,7 @@ import { Icon } from 'react-native-elements';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { Images } from "../Assets";
 import { Colors } from '../Utils';
-import {WishList,Categories,Cart,Home,Account} from '../Components';
+import {WishList,Categories,Cart,Home,Account,Contact} from '../Components';
 import {useSelector} from 'react-redux';
 import { CategoryProduct } from '../Components/Categories/CategoryProduct';
 import { Page } from '../Components/Account/Page';
@@ -78,6 +78,7 @@ const AccountStackScreen = (props)=>{
     headerMode="none" initialRouteName="Account"
      >
       <AccountStack.Screen name='Account' component={Account}/>
+      <AccountStack.Screen name='Contact' component={Contact}/>
       <AccountStack.Screen name='AppPages' component={Page}/>
     </AccountStack.Navigator>  
   )
@@ -158,8 +159,8 @@ const Tabs = [
   },
 ]
 export default HomeTabs = props => {
-  const {Wish} = useSelector(state=>state.WishList);
-  const {Cart} = useSelector(state=>state.CartList);
+  const Wish = useSelector(state=>state.WishList);
+  const Cart = useSelector(state=>state.CartList);
   // Get a name of current screen
   const routeName = props && props.route && props.route.state
     ? props.route.state.routes[props.route.state.index].name
@@ -220,9 +221,9 @@ export default HomeTabs = props => {
             component={WishListStackScreen}
             options={({
               tabBarIcon: ({ focused, color }) => <React.Fragment>
-              {Wish.length>=1&&
+              {Wish&&Wish.Wish&&Wish.Wish.length>=1&&
                <View style={[styles.Bad,{right:-10}]}>
-                 <Text style={{ fontSize: 8,color:Colors.appBlue }}>{Wish.length}</Text>
+                 <Text style={{ fontSize: 8,color:Colors.appBlue }}>{Wish.Wish.length}</Text>
                </View>}
                <Image source={Images.wishList} style={[iconstyles, { tintColor: color }]} />
              </React.Fragment>,
@@ -246,9 +247,9 @@ export default HomeTabs = props => {
             component={CartStackScreen}
             options={({
               tabBarIcon: ({ focused, color }) =>  <>
-              {Cart.length>=1&&
+              {Cart&&Cart.Cart&&Cart.Cart.length>=1&&
                <View style={styles.Bad}>
-                 <Text style={{ fontSize: 8,color:Colors.appBlue }}>{Cart.length}</Text>
+                 <Text style={{ fontSize: 8,color:Colors.appBlue }}>{Cart.Cart.length}</Text>
                </View>}
                <Icon type='feather' name='shopping-bag' color={color} size={20}/>
              </>,

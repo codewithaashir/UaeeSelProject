@@ -33,9 +33,7 @@ import { Service } from '../../Config/Services';
     const [modalVisible, setModalVisible] = useState(false);
     const [responseError, setResponseError] = useState('');
     const [allFilled] = useState(false);
-    const  _onFBLogin = (result, token) => {
-      console.warn(result);
-    };
+    var param = new FormData();
    const InfoCallback = async (error: ?Object, result: ?Object) => {
       if (!error) {
         // console.warn(error);
@@ -44,9 +42,15 @@ import { Service } from '../../Config/Services';
         //   text: "Welcome " + result.name,
         //   type: "success"
         // });
-        var token = await messaging.getToken();
-        if (token) {
-          _onFBLogin(result, token);
+        var token = await firebase.messaging().getToken()
+          if (token) {
+            param.append("f_name", result.name.split(' ')[0]);
+            param.append("l_name", result.name.split(' ')[1]);
+            param.append("email", result.email);
+            param.append("profile_pic", result.picture.data.url);
+            param.append("account_type", "Facebook");
+            param.append("device_id", token);
+            await signIn(param,'socialLogin', rememberMe, adduserData, setLoading, setResponseError, setModalVisible,props.navigation);    
         }
         else {
           console.warn('error')
@@ -71,7 +75,7 @@ import { Service } from '../../Config/Services';
                   }
                 }
               },
-              InfoCallback()
+              InfoCallback
             );
             new GraphRequestManager().addRequest(info).start();
           }
@@ -82,8 +86,6 @@ import { Service } from '../../Config/Services';
       try {
         await GoogleSignin.hasPlayServices();
         const userInfo = await GoogleSignin.signIn();
-  
-        var param = new FormData();
         var token = await firebase.messaging().getToken();
         if (token) {
           param.append("f_name", userInfo.user.givenName);

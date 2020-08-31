@@ -114,11 +114,14 @@ function CartList(state=initialState,action){
         total:
           MATCH == 'true'
             ? state.total
-            : state.total + parseInt(action.data.price).toFixed(2),
+            : parseFloat(state.total) + parseFloat(action.data.price),
       };
       case REMOVE_ITEM:
-       let temp = state.filter(item=>item!=action.data.text&&action.data.createdAt)
-       return temp;            
+        return {
+          ...state,
+          Cart: state.Cart.filter((item, i) => item.id !== action.data.id),
+          total: state.total - parseInt(action.data.price),
+        };           
        default:
        return state; 
   }

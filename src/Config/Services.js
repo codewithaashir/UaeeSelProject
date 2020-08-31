@@ -2,6 +2,7 @@ import Axios from 'axios';
 import { NavService } from '../Utils';
 import { Apis, ImgURl, HeaderSend } from './Apis';
 import AsyncStorage from '@react-native-community/async-storage';
+import { set } from 'react-native-reanimated';
 export const Service = {
     Signup:async(state,navigation,loading,responseMessage)=>{
      loading(true);
@@ -28,8 +29,8 @@ export const Service = {
             if(res.data.status=="success"){
                 console.log(res);
                 message(res.data.msg);
+                AsyncStorage.setItem('@userToken', res.data.data.token);
                 if (rememberMe) {
-                    AsyncStorage.setItem('@userToken', res.data.data.token);
                     AsyncStorage.setItem('@user', JSON.stringify(res.data.data.user));
                 }
                 setUserToken(res.data.data.token);
@@ -55,8 +56,8 @@ export const Service = {
             if(res.data.status=="success"){
                 console.log(res);
                 message(res.data.msg);
+                AsyncStorage.setItem('@userToken', res.data.data.token);
                 if (rememberMe) {
-                    AsyncStorage.setItem('@userToken', res.data.data.token);
                     AsyncStorage.setItem('@user', JSON.stringify(res.data.data.user));
                 }
                 setUserToken(res.data.data.token);
@@ -76,6 +77,27 @@ export const Service = {
            message(err.message);
         })   
     },
+    ContactUs:async (state, loading, message,modalVisible,navigation)=>{
+      loading(true);
+      let token = await AsyncStorage.getItem('@userToken');
+        if (!token) { token = global.access_token; }
+      const headers=HeaderSend.SetHeaders(global.Token);
+      await Axios.post(Apis.contactUs,state,{headers:headers}).then(res=>{         
+          if(res.data.status=="success"){
+              message(res.data.msg);
+              loading(false);
+              modalVisible(false);
+              NavService.goBack(navigation);
+            }
+            else{
+              loading(false);
+              message(res.data.msg);
+            } 
+      }).catch(err=>{
+         loading(false);
+         message(err.message);
+      })   
+  },
     getCategories:async(setState,loading,responseMessage)=>{
         loading(true);
         await Axios.get(Apis.Categories).then(res=>{
@@ -144,13 +166,19 @@ export const Service = {
         })   
    
        }, 
-     getFeaturedProduct:async(setState,loading,responseMessage)=>{
+     getFeaturedProduct:async(setState,loading,responseMessage,setNextURl,nextUrl)=>{
         loading(true);
-        await Axios.get(Apis.featuredProducts).then(res=>{
+        console.warn(nextUrl)
+        await Axios.get(nextUrl?nextUrl:Apis.featuredProducts).then(res=>{
            if(res.data.status=="success"){ 
            loading(false);
-           setState(res.data.data);
-           console.warn(res.data.data)
+           setState(state=>[...state,...res.data.data.data]);
+           //console.warn(res.data.data.next_page_url)
+           if(setNextURl&&res.data.data.next_page_url){
+            setNextURl(res.data.data.next_page_url)
+           }
+         //   if(setRefreshing) setRefreshing(false);
+           //console.warn(res.data.data)
            }
            else{
                loading(false);

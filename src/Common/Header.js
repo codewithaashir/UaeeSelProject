@@ -3,18 +3,19 @@ import { Header, Body, Title, Left, Right, Icon } from 'native-base';
 import { Image, View, TouchableOpacity, StyleSheet, Dimensions,StatusBar, Text } from 'react-native';
 import {Colors} from '../Utils';
 import { Images } from '../Assets';
-import Animated,{ Easing } from 'react-native-reanimated';
+import Animated,{ Easing, } from 'react-native-reanimated';
 import FastImage from 'react-native-fast-image'
 export default function AppHeader(props){
     const [height,setHeight]=useState(Dimensions.get('window').height)
     const [tranformHieght,setTranformHieght] = useState(new Animated.Value(height));
+    //Easing.bezier(.3,.51,.78,.49)
     useEffect(()=>{
         Animated.timing(tranformHieght, {
           toValue: height*0.14,
-          duration: 600,
+          duration: 400,
           easing: Easing.bezier(0, 1.19, 0.74, 1.2)
         }).start();
-        setHeight(Dimensions.get('window').height);
+        //setHeight(Dimensions.get('window').height);
       },[]);
     return(
          <Animated.View style={[styles.header,{height:tranformHieght}]}>
@@ -57,7 +58,7 @@ const styles=StyleSheet.create({
     },
     body: {
         flex:1,
-        marginTop:15,
+        paddingTop:35,
         justifyContent: 'center',
         alignItems: 'center'
     },   

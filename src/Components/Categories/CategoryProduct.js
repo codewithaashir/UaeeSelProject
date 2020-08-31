@@ -21,7 +21,7 @@ export  function CategoryProduct(props){
       },[]);
     return(
         <React.Fragment>
-         <Animated.View style={{transform:[{translateY:tranformView}] }}>   
+         <Animated.View style={{backgroundColor:Colors.white,transform:[{translateY:tranformView}] }}>   
          <Typography variant='bold' style={{fontSize:30,padding:20,color:Colors.appRed}}>{name}</Typography>
          <View  style={{width:40,backgroundColor:Colors.appBlue,height:4,marginLeft:20,marginTop:-10}}/>
         </Animated.View>

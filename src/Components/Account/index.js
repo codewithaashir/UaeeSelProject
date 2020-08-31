@@ -2,35 +2,48 @@ import React,{useState, useContext, useEffect}  from 'react';
 import { ScrollView, TouchableOpacity, } from 'react-native-gesture-handler';
 import { StyleSheet,View,Text,Linking,Image} from 'react-native';
 import { Languages,AppConstant, Colors, AuthContext } from '../../Utils';
-import {Typography} from '../../Common';
+import {Typography,CustomModel} from '../../Common';
 import { Icon,Avatar } from 'react-native-elements';
 import { Images } from '../../Assets';
 import { useSelector } from 'react-redux';
 import { GoogleSignin } from '@react-native-community/google-signin';
+import Contact from './Contact';
+import { LoginManager } from 'react-native-fbsdk'
+import Language from './Language';
+
 
 
 export default function Account(props){
     const User = useSelector(state=>state.User);
-    const { signOut } = useContext(AuthContext);
+    const { signOut,log } = useContext(AuthContext);
+    const [visibleContactModel,setvisibleContactModel]=useState(false); 
+    const [visibleLanguageModel,setvisibleLanguageModel]=useState(false); 
+    const [listITem,setList]=useState(User&&User.email ?AppConstant.profileLoggedItems(User,props.navigation,setvisibleContactModel,setvisibleLanguageModel,LogOut):AppConstant.profileLoginItems(User,props.navigation,setvisibleContactModel,setvisibleLanguageModel))
     useEffect(()=>{
+        console.warn(User)
         GoogleSignin.configure({
             webClientId:
               "568875059269-d26i6vtn17qaff4ekrmff5dkiqiv14e8.apps.googleusercontent.com",
             offlineAccess: false
           });
-    },[])
+    },[]);
+    useEffect(()=>{
+        setList(User&&User.email ?AppConstant.profileLoggedItems(User,props.navigation,setvisibleContactModel,setvisibleLanguageModel,LogOut):AppConstant.profileLoginItems(User,props.navigation,setvisibleContactModel,setvisibleLanguageModel,log))
+    },[User||visibleLanguageModel])
     const LogOut = async ()=>{
         try { 
-        if(User.account_type=='Google'||User.account_type=='Facebook'){
+        if(User.account_type=='Google'){
         await  GoogleSignin.revokeAccess();
         await GoogleSignin.signOut();
+        }
+        else if(User.account_type=='Facebook'){
+            LoginManager.logOut()
         }
         signOut()
     } catch (error) {
         console.error(error)
     }
-    }
-    const listITem=User&&User.email ?AppConstant.profileLoginItems(User,props.navigation,LogOut):AppConstant.profileLoginItems(User,props.navigation,LogOut);
+}
     const privacy=[
         {
             name:Languages.termCondition,
@@ -57,7 +70,7 @@ export default function Account(props){
            size={60}
            ///Component={()=>(<Image source={Images.categories}/>)}
          />
-         {User && User.name?
+         {User && User.email?
          <>
          <TouchableOpacity style={[styles.listbtn,{justifyContent:'space-between'}]} activeOpacity={0.7} >   
          <Typography variant="bold" style={{color:Colors.appRed}}>{Languages.Name}</Typography>
@@ -117,7 +130,20 @@ export default function Account(props){
              <Text style={styles.name}>{'\u00A9'+'2020 uaesale.ae '+Languages.AllRights}</Text>
              </TouchableOpacity>
              </View>
-         </View>       
+         </View>  
+         <CustomModel 
+          visible={visibleContactModel}
+          setVisible={()=>setvisibleContactModel(!visibleContactModel)}
+         > 
+            <Contact setVisible={()=>setvisibleContactModel(!visibleContactModel)} />
+         </CustomModel>
+         <CustomModel 
+          visible={visibleLanguageModel}
+          color={Colors.white}
+          setVisible={()=>setvisibleLanguageModel(!visibleLanguageModel)}
+         > 
+         <Language setVisible={()=>setvisibleLanguageModel(!visibleLanguageModel)} />
+         </CustomModel>           
         </ScrollView>    
     )
 }  
@@ -125,6 +151,10 @@ const styles= StyleSheet.create({
     accountInfo:{
         flex:1,
        
+    },
+    LanguageContainer:{
+     flexDirection:'column',
+     justifyContent:'space-between'
     },
     reachedToUs:{
         flex:1,

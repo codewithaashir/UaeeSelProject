@@ -14,6 +14,10 @@ import UaeProductItem from  './ProductItem';
 import UaeProductCatalog from './ProductCatalog';
 import  UaeCommonItem  from './CommonItem';
 import UaeItem from  './Item';
+import UaeGradientBtn from './GradientButton';
+import UaeNavBar from './NavBar';
+import UaeCustomModel from './CustomModel';
+import ProductPrice from './ProductPrice'
 export const CustomDesign=UaeCustomDesign
 export const Device=UaeDevice
 export const Header=UaeHeader
@@ -29,4 +33,8 @@ export const CategoriesItem =UaeCategoriesItem
 export const ProductItem =UaeProductItem
 export const ProductCatalog = UaeProductCatalog
 export const CommonItem = UaeCommonItem
-export const Item = UaeItem
+export const Item = UaeItem;
+export const Price=ProductPrice;
+export const GradientBtn=UaeGradientBtn;
+export const NavBar=UaeNavBar;
+export const CustomModel=UaeCustomModel;

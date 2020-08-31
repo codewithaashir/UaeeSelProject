@@ -7,14 +7,16 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { ImgURl } from '../Config/Apis';
 import css from '../Styles';
 import Typography from './Typography';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import  {Icon} from  'react-native-elements'; 
 const {height,width} = Dimensions.get('window');
 import Animated,{Easing} from 'react-native-reanimated';
+import {Toast} from 'native-base';
 import { addItemQuanToCart } from '../Redux/Reducer/Cart';
 export default function Item(props){
     const [tranformText,setTranformText] = useState(new Animated.Value(-9));
     const {index,item,scene,onPress,onDeleteItem} = props;
+    const {Cart} = useSelector(state=>state.CartList)
     const [count,setCount]=useState(item.pro_qty);
     const dispatch =useDispatch();
     useEffect(()=>{
@@ -27,9 +29,43 @@ export default function Item(props){
     const addItemQua=(product,value)=>{
         dispatch(addItemQuanToCart(product,value))
     }
+    const changeQty= async (type) => {
+      if(type=='add') {
+      if (count <= item.qty) {
+        setCount(count+1);
+      await addItemQua(item, type);
+      AsyncStorage.setItem(
+        'Cart',
+        JSON.stringify(Cart),
+      );
+       } else {
+         Toast.show({
+           text: 'Item Out of Stock!',
+         });
+       }
+     }
+     else{
+      if(count>1) {
+        setCount(count-1);
+        await addItemQua(item, type);
+      AsyncStorage.setItem(
+        'Cart',
+        JSON.stringify(Cart),
+      );
+      }
+      else{
+        onDeleteItem()
+        AsyncStorage.setItem(
+          'Cart',
+          JSON.stringify(Cart),
+        );
+      }
+     }
+    }
     return(
         <View style={styles.container}>
             <View style={styles.content}>
+            
               <TouchableOpacity onPress={() => onPress()}>
               <FastImage
                 style={styles.image}
@@ -56,41 +92,29 @@ export default function Item(props){
               </Text>
             </View>
             </Animated.View>
-            <View style={{flexDirection:'column',position:'absolute',right:0,top:0}}>
-            <TouchableOpacity activeOpacity={0.7} onPress={async () => {
-  if (count <= item.qty) {
-    setCount(count+1);
-    await addItemQua(item, 'add');
-    AsyncStorage.setItem(
-      'CART',
-      JSON.stringify(this.props.cartItems),
-    );
-    // this.setState(
-    //   {count: this.state.count + 1},
-    //   this.props.Update({
-    //     id: this.props.data.id,
-    //     qty: this.state.count + 1,
-    //   }),
-    //   this.props.onRefresh(),
-    // );
-  } else {
-    Toast.show({
-      text: 'Item Out of Stock!',
-    });
-  }
-}}> 
-            <Icon  type="antdesign" name="caretup" size={20} color={Colors.appRed} />
+            <View style={{flexDirection:'column',justifyContent:'space-between'}}>
+            <TouchableOpacity
+            style={{justifyContent:'flex-end',alignItems:'flex-end'}}
+            onPress={onDeleteItem}
+            >
+                <Icon name="closecircle" type="antdesign" color={Colors.appRed}/>
+            </TouchableOpacity>
+           {scene!='wish' &&
+           <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+            <TouchableOpacity style={[styles.iconBtn,{marginEnd:3}]} activeOpacity={0.7} onPress={()=>changeQty('minus')}> 
+            <Icon  type="font-awesome" name="minus" size={20} color={Colors.appRed} />
            </TouchableOpacity> 
-           <Text style={[styles.price]}>
+           <Text style={[styles.price,{marginStart:4,marginEnd:4}]}>
                 {item.pro_qty?item.pro_qty:0}
               </Text>
-           <TouchableOpacity activeOpacity={0.7} onPress={onDeleteItem}> 
-            <Icon  type="antdesign" name="caretdown" size={20} color={Colors.appRed} />
+           <TouchableOpacity  style={styles.iconBtn} activeOpacity={0.7} onPress={()=>changeQty('add')}> 
+            <Icon  type="font-awesome" name="plus" size={20} color={Colors.appRed} />
            </TouchableOpacity>
-           </View> 
-           <TouchableOpacity activeOpacity={0.7} style={{flex:1,flexDirection:'column-reverse'}} onPress={onDeleteItem}> 
+           </View> }
+           </View>
+           {/* <TouchableOpacity activeOpacity={0.7} style={{flex:1,flexDirection:'column-reverse'}} onPress={onDeleteItem}> 
             <FontAwesome name="trash" size={30} color={Colors.appRed} />
-           </TouchableOpacity> 
+           </TouchableOpacity>  */}
              </View>   
         </View>
     )
@@ -131,5 +155,14 @@ const styles =  StyleSheet.create({
         color: Colors.appBlue,
         textAlign:'center',
         fontFamily: 'Lato-Bold',
+      },
+      iconBtn:{
+        width:25,
+        height:25,
+        marginStart:4,
+        borderRadius:7,
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:Colors.lightGreen  
       },
 }) 
